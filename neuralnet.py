@@ -15,9 +15,9 @@ import matplotlib.pyplot as plt
 N, D_in, D_h, D_out = 30, 2, 10, 3
 
 
-# Création d'une matrice d'entrée X et de sortie Y avec des valeurs aléatoires
-X = np.random.random((N, D_in))
-Y = np.random.random((N, D_out))
+# # Création d'une matrice d'entrée X et de sortie Y avec des valeurs aléatoires
+# X = np.random.random((N, D_in))
+# Y = np.random.random((N, D_out))
 
 
 # Initialisation aléatoire des poids du réseau
