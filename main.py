@@ -143,7 +143,7 @@ class Neuralnet:
         else:
             self.weights = {}
 
-    def train(self, learning_rate=0.1, nb_iter=10000, plot=True, save_weights=True):
+    def train(self, learning_rate=1e-4, nb_iter=10000, plot=True, save_weights=True):
         ##########################
         # Génération des données #
         ##########################
@@ -165,8 +165,6 @@ class Neuralnet:
         self.weights["b1"] = np.zeros((1, D_h))
         self.weights["W2"] = 2 * np.random.random((D_h, D_out)) - 1
         self.weights["b2"] = np.zeros((1, D_out))
-
-        loss_values = []
 
         for t in tqdm(range(nb_iter)):
             W1, b1, W2, b2 = (
@@ -191,10 +189,12 @@ class Neuralnet:
             ########################################################
             # Calcul et affichage de la fonction perte de type MSE #
             ########################################################
+            # loss = -np.sum(Y_train * np.log(Y_pred + 1e-9)) / N
             loss = np.square(Y_pred - Y_train).sum() / N
-            loss_values.append(loss)
             if t % 1000 == 0:
-                print(loss)
+                # print(loss)
+                if plot:
+                    plt.plot(t, loss, "o", color="r")
 
             delta_O2 = Y_pred - Y_train  # N*D_out
             delta_I2 = ((1 - O2) * O2) * delta_O2  # N*D_out
@@ -220,9 +220,6 @@ class Neuralnet:
 
         if save_weights:
             self.save_weights()
-
-        if plot:
-            plt.plot(range(nb_iter), loss_values, "o", color="blue")
 
     def predict(self, X):
         W1, b1, W2, b2 = (
@@ -250,8 +247,10 @@ class Neuralnet:
 
         Y_pred = self.predict(self.X_test)
         Y_pred = np.argmax(Y_pred, axis=1)
-        print(Y_pred)
-        print(Y_test)
+
+        # Computes accuracy
+        accuracy = np.sum(self.Y_test == Y_pred) / len(self.Y_test)
+        print(f"ACCURACY : {accuracy}%")
 
     def save_weights(self):
         with open("nn_weights.pkl", "wb") as f:
@@ -268,13 +267,13 @@ if __name__ == "__main__":
 
     X, Y = lecture_cifar(path=path, nb_batches=5)
     X_train, Y_train, X_test, Y_test = decoupage_donnees(
-        X, Y, ratio=0.1, small_sample=True
+        X, Y, ratio=0.8, small_sample=False
     )
 
     # kppv = Kppv(X_train, X_test, Y_train, Y_test)
     # kppv.run()
 
     nn = Neuralnet(X_train, X_test, Y_train, Y_test)
-    nn.train(learning_rate=0.1, nb_iter=100, save_weights=False)
+    nn.train(learning_rate=1e-3, nb_iter=10000, save_weights=True)
     nn.run()
     plt.show()

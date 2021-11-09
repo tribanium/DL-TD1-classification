@@ -1,5 +1,4 @@
 cifar-10-python
 *.ipynb
 *.pdf
-*.pkl
 .DS_Store
