@@ -8,7 +8,7 @@ from numpy.lib.npyio import save
 
 
 path = "./cifar-10-python/cifar-10-batches-py"
-# np.random.seed(1)
+np.random.seed(1)
 
 
 def unpickle(file):
@@ -274,6 +274,6 @@ if __name__ == "__main__":
     # kppv.run()
 
     nn = Neuralnet(X_train, X_test, Y_train, Y_test)
-    nn.train(learning_rate=1e-3, nb_iter=10000, save_weights=True)
+    # nn.train(learning_rate=1e-3, nb_iter=10000, save_weights=True)
     nn.run()
     plt.show()
